@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ProdutoStoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Categoria">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Descricao" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="Ativacao" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Produtos" Relationship="Self.FK_Produtos_Categorias" FromRole="Categorias" ToRole="Produtos" />
+  </EntityType>
+  <EntityType Name="Produto">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Descricao" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="CategoriaId" Type="Int32" Nullable="false" />
+    <Property Name="Perecivel" Type="Boolean" Nullable="false" />
+    <Property Name="Ativacao" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Categoria" Relationship="Self.FK_Produtos_Categorias" FromRole="Produtos" ToRole="Categorias" />
+  </EntityType>
+  <Association Name="FK_Produtos_Categorias">
+    <End Role="Categorias" Type="Self.Categoria" Multiplicity="1" />
+    <End Role="Produtos" Type="Self.Produto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categorias">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Produtos">
+        <PropertyRef Name="CategoriaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ProdutoStoreEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Categorias" EntityType="Self.Categoria" />
+    <EntitySet Name="Produtos" EntityType="Self.Produto" />
+    <AssociationSet Name="FK_Produtos_Categorias" Association="Self.FK_Produtos_Categorias">
+      <End Role="Categorias" EntitySet="Categorias" />
+      <End Role="Produtos" EntitySet="Produtos" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
